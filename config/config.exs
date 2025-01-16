@@ -9,7 +9,15 @@ import Config
 
 config :beeminder_withings_sync,
   ecto_repos: [BeeminderWithingsSync.Repo],
-  generators: [timestamp_type: :utc_datetime, binary_id: true]
+  generators: [timestamp_type: :utc_datetime, binary_id: true],
+  beeminder_base_url: System.get_env("BEEMINDER_BASE_URL", "https://www.beeminder.com"),
+  beeminder_redirect_uri_path:
+    System.get_env(
+      "BEEMINDER_REDIRECT_URI_PATH",
+      "/beeminder/auth_callback"
+    ),
+  beeminder_client_id: System.get_env("BEEMINDER_CLIENT_ID"),
+  beeminder_client_secret: System.get_env("BEEMINDER_CLIENT_SECRET")
 
 # Configures the endpoint
 config :beeminder_withings_sync, BeeminderWithingsSyncWeb.Endpoint,

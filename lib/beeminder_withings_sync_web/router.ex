@@ -21,6 +21,12 @@ defmodule BeeminderWithingsSyncWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    get "/beeminder/auth_callback", BeeminderController, :auth_callback
+
+    # https://beeminder-withings-sync.fly.dev/beeminder/auth_callback
+    # https://beeminder-withings-sync.fly.dev/beeminder/de_auth_callback
+    # https://beeminder-withings-sync.fly.dev/beeminder/auto_fetch_callback
   end
 
   # Other scopes may use custom stacks.
