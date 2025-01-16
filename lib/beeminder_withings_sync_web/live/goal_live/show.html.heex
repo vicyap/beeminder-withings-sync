@@ -2,7 +2,7 @@
   Goal {@goal.id}
   <:subtitle>This is a goal record from your database.</:subtitle>
   <:actions>
-    <.link patch={~p"/goals/#{@goal}/show/edit"} phx-click={JS.push_focus()}>
+    <.link patch={~p"/app/goals/#{@goal}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit goal</.button>
     </.link>
   </:actions>
@@ -12,15 +12,20 @@
   <:item title="Slug">{@goal.slug}</:item>
 </.list>
 
-<.back navigate={~p"/goals"}>Back to goals</.back>
+<.back navigate={~p"/app/goals"}>Back to goals</.back>
 
-<.modal :if={@live_action == :edit} id="goal-modal" show on_cancel={JS.patch(~p"/goals/#{@goal}")}>
+<.modal
+  :if={@live_action == :edit}
+  id="goal-modal"
+  show
+  on_cancel={JS.patch(~p"/app/goals/#{@goal}")}
+>
   <.live_component
     module={BeeminderWithingsSyncWeb.GoalLive.FormComponent}
     id={@goal.id}
     title={@page_title}
     action={@live_action}
     goal={@goal}
-    patch={~p"/goals/#{@goal}"}
+    patch={~p"/app/goals/#{@goal}"}
   />
 </.modal>

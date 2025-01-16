@@ -1,7 +1,7 @@
 <.header>
   Listing Goals
   <:actions>
-    <.link patch={~p"/goals/new"}>
+    <.link patch={~p"/app/goals/new"}>
       <.button>New Goal</.button>
     </.link>
   </:actions>
@@ -10,14 +10,14 @@
 <.table
   id="goals"
   rows={@streams.goals}
-  row_click={fn {_id, goal} -> JS.navigate(~p"/goals/#{goal}") end}
+  row_click={fn {_id, goal} -> JS.navigate(~p"/app/goals/#{goal}") end}
 >
   <:col :let={{_id, goal}} label="Slug">{goal.slug}</:col>
   <:action :let={{_id, goal}}>
     <div class="sr-only">
-      <.link navigate={~p"/goals/#{goal}"}>Show</.link>
+      <.link navigate={~p"/app/goals/#{goal}"}>Show</.link>
     </div>
-    <.link patch={~p"/goals/#{goal}/edit"}>Edit</.link>
+    <.link patch={~p"/app/goals/#{goal}/edit"}>Edit</.link>
   </:action>
   <:action :let={{id, goal}}>
     <.link
@@ -29,13 +29,18 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="goal-modal" show on_cancel={JS.patch(~p"/goals")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="goal-modal"
+  show
+  on_cancel={JS.patch(~p"/app/goals")}
+>
   <.live_component
     module={BeeminderWithingsSyncWeb.GoalLive.FormComponent}
     id={@goal.id || :new}
     title={@page_title}
     action={@live_action}
     goal={@goal}
-    patch={~p"/goals"}
+    patch={~p"/app/goals"}
   />
 </.modal>

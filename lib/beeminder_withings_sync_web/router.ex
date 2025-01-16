@@ -61,8 +61,10 @@ defmodule BeeminderWithingsSyncWeb.Router do
     end
   end
 
-  scope "/", BeeminderWithingsSyncWeb do
+  scope "/app", BeeminderWithingsSyncWeb do
     pipe_through [:browser, :require_authenticated_user]
+
+    live "/", DashboardLive, :index
 
     live_session :require_authenticated_user,
       on_mount: [{BeeminderWithingsSyncWeb.UserAuth, :ensure_authenticated}] do
