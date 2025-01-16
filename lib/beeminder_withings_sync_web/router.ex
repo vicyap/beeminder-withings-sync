@@ -66,6 +66,12 @@ defmodule BeeminderWithingsSyncWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{BeeminderWithingsSyncWeb.UserAuth, :ensure_authenticated}] do
+      live "/goals", GoalLive.Index, :index
+      live "/goals/new", GoalLive.Index, :new
+      live "/goals/:id/edit", GoalLive.Index, :edit
+
+      live "/goals/:id", GoalLive.Show, :show
+      live "/goals/:id/show/edit", GoalLive.Show, :edit
     end
   end
 
