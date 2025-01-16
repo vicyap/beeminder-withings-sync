@@ -4,13 +4,11 @@ defmodule BeeminderWithingsSync.AccountsFixtures do
   entities via the `BeeminderWithingsSync.Accounts` context.
   """
 
-  def unique_user_email, do: "user#{System.unique_integer()}@example.com"
-  def valid_user_password, do: "hello world!"
+  def unique_beeminder_username, do: "beeminder-user#{System.unique_integer()}"
 
   def valid_user_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
-      email: unique_user_email(),
-      password: valid_user_password()
+      beeminder_username: unique_beeminder_username(),
     })
   end
 
@@ -18,7 +16,7 @@ defmodule BeeminderWithingsSync.AccountsFixtures do
     {:ok, user} =
       attrs
       |> valid_user_attributes()
-      |> BeeminderWithingsSync.Accounts.register_user()
+      |> BeeminderWithingsSync.Accounts.create_user()
 
     user
   end
