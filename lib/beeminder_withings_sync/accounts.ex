@@ -27,6 +27,27 @@ defmodule BeeminderWithingsSync.Accounts do
   end
 
   @doc """
+  Gets or creates a user by beeminder username.
+
+  ## Examples
+
+      iex> get_or_create_user_by_beeminder_username("foo")
+      {:ok, %User{}}
+
+      iex> get_or_create_user_by_beeminder_username("unknown")
+      {:ok, %User{}}
+  """
+  def get_or_create_user_by_beeminder_username(username) when is_binary(username) do
+    case get_user_by_beeminder_username(username) do
+      nil ->
+        create_user(%{beeminder_username: username})
+
+      user ->
+        {:ok, user}
+    end
+  end
+
+  @doc """
   Gets a single user.
 
   Raises `Ecto.NoResultsError` if the User does not exist.
