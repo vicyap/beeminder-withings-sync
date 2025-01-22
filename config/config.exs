@@ -10,6 +10,7 @@ import Config
 config :beeminder_withings_sync,
   ecto_repos: [BeeminderWithingsSync.Repo],
   generators: [timestamp_type: :utc_datetime, binary_id: true],
+  beeminder_client_module: BeeminderWithingsSync.BeeminderHTTPClient,
   beeminder_base_url: System.get_env("BEEMINDER_BASE_URL", "https://www.beeminder.com"),
   beeminder_redirect_uri_path:
     System.get_env(

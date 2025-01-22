@@ -2,27 +2,26 @@ defmodule BeeminderWithingsSyncWeb.BeeminderController do
   use BeeminderWithingsSyncWeb, :controller
 
   alias BeeminderWithingsSync.Accounts
-  alias BeeminderWithingsSync.Beeminder
   alias BeeminderWithingsSyncWeb.UserAuth
 
-  def auth_callback(conn, _params = %{access_token: access_token}) do
-    # params: %{"access_token" => "access_token", "username" => "username"}
-    case Beeminder.get_current_user(access_token) do
+  def auth_callback(conn, _params = %{"access_token" => access_token, "username" => _username}) do
+    beeminder_client = Application.get_env(:beeminder_withings_sync, :beeminder_client_module)
+
+    case beeminder_client.get_current_user(access_token) do
       {:ok, resp} ->
-        beeminder_username = resp["username"]
+        beeminder_username = Map.fetch!(resp, "username")
 
         case Accounts.get_or_create_user_by_beeminder_username(beeminder_username) do
           {:ok, user} ->
             conn
             |> UserAuth.log_in_user(user)
-            |> redirect(to: ~p"/app")
 
           {:error, _reason} ->
-            redirect(conn, ~p"/users/log_in")
+            redirect(conn, to: ~p"/users/log_in")
         end
 
       {:error, _reason} ->
-        redirect(conn, ~p"/users/log_in")
+        redirect(conn, to: ~p"/users/log_in")
     end
   end
 
