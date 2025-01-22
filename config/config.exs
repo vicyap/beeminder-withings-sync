@@ -10,15 +10,19 @@ import Config
 config :beeminder_withings_sync,
   ecto_repos: [BeeminderWithingsSync.Repo],
   generators: [timestamp_type: :utc_datetime, binary_id: true],
-  beeminder_client_module: BeeminderWithingsSync.BeeminderHTTPClient,
-  beeminder_base_url: System.get_env("BEEMINDER_BASE_URL", "https://www.beeminder.com"),
-  beeminder_redirect_uri_path:
-    System.get_env(
-      "BEEMINDER_REDIRECT_URI_PATH",
-      "/beeminder/auth_callback"
-    ),
+  beeminder_api_base_url:
+    System.get_env("BEEMINDER_API_BASE_URL", "https://www.beeminder.com/api/v1"),
+  beeminder_auth_base_url:
+    System.get_env("BEEMINDER_AUTH_BASE_URL", "https://www.beeminder.com/apps/authorize"),
   beeminder_client_id: System.get_env("BEEMINDER_CLIENT_ID"),
-  beeminder_client_secret: System.get_env("BEEMINDER_CLIENT_SECRET")
+  beeminder_client_module: BeeminderWithingsSync.BeeminderHTTPClient,
+  beeminder_client_secret: System.get_env("BEEMINDER_CLIENT_SECRET"),
+  withings_api_base_url: System.get_env("WITHINGS_API_URL", "https://wbsapi.withings.net"),
+  withings_auth_base_url:
+    System.get_env("WITHINGS_AUTH_URL", "https://account.withings.com/oauth2_user/authorize2"),
+  withings_client_id: System.get_env("WITHINGS_CLIENT_ID"),
+  withings_client_module: BeeminderWithingsSync.WithingsHTTPClient,
+  withings_client_secret: System.get_env("WITHINGS_CLIENT_SECRET")
 
 # Configures the endpoint
 config :beeminder_withings_sync, BeeminderWithingsSyncWeb.Endpoint,
