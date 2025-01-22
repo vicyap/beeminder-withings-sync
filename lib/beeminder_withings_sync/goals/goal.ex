@@ -6,7 +6,7 @@ defmodule BeeminderWithingsSync.Goals.Goal do
   @foreign_key_type :binary_id
   schema "goals" do
     field :slug, :string
-    field :user_id, :binary_id
+    belongs_to :user, BeeminderWithingsSync.Accounts.User
 
     timestamps(type: :utc_datetime)
   end

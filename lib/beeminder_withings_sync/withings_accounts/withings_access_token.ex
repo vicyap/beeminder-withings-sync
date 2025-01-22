@@ -11,7 +11,7 @@ defmodule BeeminderWithingsSync.WithingsAccounts.WithingsAccessToken do
     field :expires_in, :integer
     field :token_type, :string
     field :withings_user_id, :string
-    field :user_id, :binary_id
+    belongs_to :user, BeeminderWithingsSync.Accounts.User
 
     timestamps(type: :utc_datetime)
   end
@@ -19,7 +19,21 @@ defmodule BeeminderWithingsSync.WithingsAccounts.WithingsAccessToken do
   @doc false
   def changeset(withings_access_token, attrs) do
     withings_access_token
-    |> cast(attrs, [:access_token, :refresh_token, :expires_in, :scope, :token_type, :withings_user_id])
-    |> validate_required([:access_token, :refresh_token, :expires_in, :scope, :token_type, :withings_user_id])
+    |> cast(attrs, [
+      :access_token,
+      :refresh_token,
+      :expires_in,
+      :scope,
+      :token_type,
+      :withings_user_id
+    ])
+    |> validate_required([
+      :access_token,
+      :refresh_token,
+      :expires_in,
+      :scope,
+      :token_type,
+      :withings_user_id
+    ])
   end
 end
