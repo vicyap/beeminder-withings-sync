@@ -5,7 +5,7 @@ defmodule BeeminderWithingsSyncWeb.BeeminderControllerTest do
   import Mox
 
   alias BeeminderWithingsSync.Accounts
-  alias BeeminderWithingsSync.BeeminderClientMock
+  alias BeeminderWithingsSync.Beeminder.BeeminderClientMock
 
   describe "GET /beeminder/auth_callback" do
     setup do

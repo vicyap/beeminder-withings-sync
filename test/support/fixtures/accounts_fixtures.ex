@@ -4,12 +4,8 @@ defmodule BeeminderWithingsSync.AccountsFixtures do
   entities via the `BeeminderWithingsSync.Accounts` context.
   """
 
-  def unique_beeminder_username, do: "beeminder-user#{System.unique_integer()}"
-
   def valid_user_attributes(attrs \\ %{}) do
-    Enum.into(attrs, %{
-      beeminder_username: unique_beeminder_username(),
-    })
+    Enum.into(attrs, %{})
   end
 
   def user_fixture(attrs \\ %{}) do

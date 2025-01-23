@@ -1,5 +1,5 @@
-defmodule BeeminderWithingsSync.BeeminderHTTPClient do
-  @behaviour BeeminderWithingsSync.BeeminderClient
+defmodule BeeminderWithingsSync.Beeminder.BeeminderHTTPClient do
+  @behaviour BeeminderWithingsSync.Beeminder.BeeminderClient
 
   def get_current_user(access_token) when is_binary(access_token) do
     params = %{access_token: access_token}
@@ -14,7 +14,7 @@ defmodule BeeminderWithingsSync.BeeminderHTTPClient do
     |> handle_response()
   end
 
-  def api_base_url(),
+  defp api_base_url(),
     do: Application.fetch_env!(:beeminder_withings_sync, :beeminder_api_base_url)
 
   defp handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}) do

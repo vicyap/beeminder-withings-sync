@@ -1,5 +1,5 @@
-defmodule BeeminderWithingsSync.WithingsHTTPClient do
-  @behaviour BeeminderWithingsSync.WithingsClient
+defmodule BeeminderWithingsSync.Withings.WithingsHTTPClient do
+  @behaviour BeeminderWithingsSync.Withings.WithingsClient
 
   def oauth2_request_token(refresh_token, grant_type = "refresh_token")
       when is_binary(refresh_token) do
@@ -42,7 +42,7 @@ defmodule BeeminderWithingsSync.WithingsHTTPClient do
     |> handle_response()
   end
 
-  def api_base_url(),
+  defp api_base_url(),
     do: Application.fetch_env!(:beeminder_withings_sync, :withings_api_base_url)
 
   defp handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}) do

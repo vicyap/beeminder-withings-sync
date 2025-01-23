@@ -1,7 +1,7 @@
 defmodule BeeminderWithingsSyncWeb.WithingsController do
   use BeeminderWithingsSyncWeb, :controller
 
-  alias BeeminderWithingsSync.Withings
+  alias BeeminderWithingsSyncWeb.OAuthHelpers
 
   def auth_callback(conn, %{"code" => code, "state" => state}) do
     # TODO: verify state
@@ -9,7 +9,11 @@ defmodule BeeminderWithingsSyncWeb.WithingsController do
 
     withings_client = Application.get_env(:beeminder_withings_sync, :withings_client_module)
 
-    case withings_client.oauth2_request_token(code, "authorization_code", Withings.redirect_uri()) do
+    case withings_client.oauth2_request_token(
+           code,
+           "authorization_code",
+           OAuthHelpers.withings_redirect_uri()
+         ) do
       {:ok,
        %{
          "access_token" => access_token,
@@ -27,6 +31,8 @@ defmodule BeeminderWithingsSyncWeb.WithingsController do
           token_type: token_type,
           user_id: user_id
         )
+
+        # TODO: save withings access tokens to database
 
         redirect(conn, to: ~p"/app")
 

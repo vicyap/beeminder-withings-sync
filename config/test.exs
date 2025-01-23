@@ -35,4 +35,5 @@ config :phoenix_live_view,
   enable_expensive_runtime_checks: true
 
 config :beeminder_withings_sync,
-  beeminder_client_module: BeeminderWithingsSync.BeeminderClientMock
+  beeminder_client_module: BeeminderWithingsSync.Beeminder.BeeminderClientMock,
+  withings_client_module: BeeminderWithingsSync.Withings.WithingsClientMock

@@ -1,4 +1,4 @@
-defmodule BeeminderWithingsSync.BeeminderClient do
+defmodule BeeminderWithingsSync.Beeminder.BeeminderClient do
   @moduledoc """
   Behavior for interacting with Beeminder API.
   """

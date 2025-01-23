@@ -1,21 +1,120 @@
 defmodule BeeminderWithingsSync.Beeminder do
-  def auth_url() do
-    redirect_uri =
-      BeeminderWithingsSyncWeb.Endpoint.url()
-      |> Path.join("/beeminder/auth_callback")
+  @moduledoc """
+  The Beeminder context.
+  """
 
+  import Ecto.Query, warn: false
+  alias BeeminderWithingsSync.Repo
+
+  alias BeeminderWithingsSync.Beeminder.BeeminderUserInfo
+
+  @doc """
+  Returns the Beeminder authorization URL.
+  """
+  def auth_url(redirect_uri) do
     params = %{
       client_id: Application.fetch_env!(:beeminder_withings_sync, :beeminder_client_id),
       redirect_uri: redirect_uri,
       response_type: "token"
     }
 
-    auth_base_url()
+    Application.fetch_env!(:beeminder_withings_sync, :beeminder_auth_base_url)
     |> URI.parse()
     |> Map.put(:query, URI.encode_query(params))
     |> URI.to_string()
   end
 
-  defp auth_base_url(),
-    do: Application.fetch_env!(:beeminder_withings_sync, :beeminder_auth_base_url)
+  @doc """
+  Returns the list of beeminder_user_infos.
+
+  ## Examples
+
+      iex> list_beeminder_user_infos()
+      [%BeeminderUserInfo{}, ...]
+
+  """
+  def list_beeminder_user_infos do
+    Repo.all(BeeminderUserInfo)
+  end
+
+  @doc """
+  Gets a single beeminder_user_info.
+
+  Raises `Ecto.NoResultsError` if the Beeminder user info does not exist.
+
+  ## Examples
+
+      iex> get_beeminder_user_info!(123)
+      %BeeminderUserInfo{}
+
+      iex> get_beeminder_user_info!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_beeminder_user_info!(id), do: Repo.get!(BeeminderUserInfo, id)
+
+  @doc """
+  Creates a beeminder_user_info.
+
+  ## Examples
+
+      iex> create_beeminder_user_info(%{field: value})
+      {:ok, %BeeminderUserInfo{}}
+
+      iex> create_beeminder_user_info(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_beeminder_user_info(attrs \\ %{}) do
+    %BeeminderUserInfo{}
+    |> BeeminderUserInfo.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a beeminder_user_info.
+
+  ## Examples
+
+      iex> update_beeminder_user_info(beeminder_user_info, %{field: new_value})
+      {:ok, %BeeminderUserInfo{}}
+
+      iex> update_beeminder_user_info(beeminder_user_info, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_beeminder_user_info(%BeeminderUserInfo{} = beeminder_user_info, attrs) do
+    beeminder_user_info
+    |> BeeminderUserInfo.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a beeminder_user_info.
+
+  ## Examples
+
+      iex> delete_beeminder_user_info(beeminder_user_info)
+      {:ok, %BeeminderUserInfo{}}
+
+      iex> delete_beeminder_user_info(beeminder_user_info)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_beeminder_user_info(%BeeminderUserInfo{} = beeminder_user_info) do
+    Repo.delete(beeminder_user_info)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking beeminder_user_info changes.
+
+  ## Examples
+
+      iex> change_beeminder_user_info(beeminder_user_info)
+      %Ecto.Changeset{data: %BeeminderUserInfo{}}
+
+  """
+  def change_beeminder_user_info(%BeeminderUserInfo{} = beeminder_user_info, attrs \\ %{}) do
+    BeeminderUserInfo.changeset(beeminder_user_info, attrs)
+  end
 end
