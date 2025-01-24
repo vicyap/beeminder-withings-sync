@@ -36,4 +36,5 @@ config :phoenix_live_view,
 
 config :beeminder_withings_sync,
   beeminder_client_module: BeeminderWithingsSync.Beeminder.BeeminderClientMock,
-  withings_client_module: BeeminderWithingsSync.Withings.WithingsClientMock
+  withings_client_module: BeeminderWithingsSync.Withings.WithingsClientMock,
+  start_withings_token_refresher: false

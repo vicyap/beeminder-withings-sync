@@ -55,6 +55,18 @@ defmodule BeeminderWithingsSync.Withings do
   """
   def get_withings_user_info!(withings_user_id), do: Repo.get!(WithingsUserInfo, withings_user_id)
 
+  @doc """
+  Gets a single withings_user_info.
+
+  ## Examples
+
+      iex> get_withings_user_info("userid")
+      %WithingsUserInfo{}
+
+      iex> get_withings_user_info("unknown")
+      nil
+
+  """
   def get_withings_user_info(withings_user_id) do
     Repo.get(WithingsUserInfo, withings_user_id)
   end

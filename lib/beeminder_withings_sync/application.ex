@@ -10,13 +10,29 @@ defmodule BeeminderWithingsSync.Application do
     children = [
       BeeminderWithingsSyncWeb.Telemetry,
       BeeminderWithingsSync.Repo,
-      {DNSCluster, query: Application.get_env(:beeminder_withings_sync, :dns_cluster_query) || :ignore},
-      {Phoenix.PubSub, name: BeeminderWithingsSync.PubSub},
+      {DNSCluster,
+       query: Application.get_env(:beeminder_withings_sync, :dns_cluster_query) || :ignore},
+      {Phoenix.PubSub, name: BeeminderWithingsSync.PubSub}
       # Start a worker by calling: BeeminderWithingsSync.Worker.start_link(arg)
       # {BeeminderWithingsSync.Worker, arg},
-      # Start to serve requests, typically the last entry
-      BeeminderWithingsSyncWeb.Endpoint
     ]
+
+    children =
+      children ++
+        [
+          # Start to serve requests, typically the last entry
+          BeeminderWithingsSyncWeb.Endpoint
+        ]
+
+    children =
+      if Application.get_env(:beeminder_withings_sync, :start_withings_token_refresher, true) do
+        children ++
+          [
+            {BeeminderWithingsSync.Withings.TokenRefresher, refresh_buffer_ms: 300_000}
+          ]
+      else
+        children
+      end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

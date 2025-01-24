@@ -1,42 +1,52 @@
 defmodule BeeminderWithingsSync.Withings.WithingsHTTPClient do
   @behaviour BeeminderWithingsSync.Withings.WithingsClient
 
-  # def oauth2_request_token(refresh_token, grant_type = "refresh_token")
-  #     when is_binary(refresh_token) do
-  #   params = %{
-  #     action: "requesttoken",
-  #     client_id: Application.fetch_env!(:beeminder_withings_sync, :withings_client_id),
-  #     client_secret: Application.fetch_env!(:beeminder_withings_sync, :withings_client_secret),
-  #     grant_type: grant_type,
-  #     refresh_token: refresh_token
-  #   }
-  #   body = Enum.map_join(params, "&", fn {k, v} -> "#{k}=#{v}" end)
-  #   api_base_url()
-  #   |> URI.parse()
-  #   |> URI.append_path("/v2/oauth2")
-  #   |> URI.to_string()
-  #   |> HTTPoison.post(body)
-  #   |> handle_response()
-  # end
+  def oauth2_request_token(refresh_token, grant_type = "refresh_token")
+      when is_binary(refresh_token) do
+    body =
+      %{
+        action: "requesttoken",
+        client_id: Application.fetch_env!(:beeminder_withings_sync, :withings_client_id),
+        client_secret: Application.fetch_env!(:beeminder_withings_sync, :withings_client_secret),
+        grant_type: grant_type,
+        refresh_token: refresh_token
+      }
+      |> URI.encode_query()
 
-  def oauth2_request_token(code, grant_type = "authorization_code", redirect_uri)
-      when is_binary(code) and is_binary(redirect_uri) do
-    params = %{
-      action: "requesttoken",
-      client_id: Application.fetch_env!(:beeminder_withings_sync, :withings_client_id),
-      client_secret: Application.fetch_env!(:beeminder_withings_sync, :withings_client_secret),
-      grant_type: grant_type,
-      code: code,
-      redirect_uri: redirect_uri
-    }
-
-    body = Enum.map_join(params, "&", fn {k, v} -> "#{k}=#{v}" end)
+    headers = [
+      {"Content-Type", "application/x-www-form-urlencoded"}
+    ]
 
     api_base_url()
     |> URI.parse()
     |> URI.append_path("/v2/oauth2")
     |> URI.to_string()
-    |> HTTPoison.post(body)
+    |> HTTPoison.post(body, headers)
+    |> handle_response()
+  end
+
+  def oauth2_request_token(code, grant_type = "authorization_code", redirect_uri)
+      when is_binary(code) and is_binary(redirect_uri) do
+    body =
+      %{
+        action: "requesttoken",
+        client_id: Application.fetch_env!(:beeminder_withings_sync, :withings_client_id),
+        client_secret: Application.fetch_env!(:beeminder_withings_sync, :withings_client_secret),
+        grant_type: grant_type,
+        code: code,
+        redirect_uri: redirect_uri
+      }
+      |> URI.encode_query()
+
+    headers = [
+      {"Content-Type", "application/x-www-form-urlencoded"}
+    ]
+
+    api_base_url()
+    |> URI.parse()
+    |> URI.append_path("/v2/oauth2")
+    |> URI.to_string()
+    |> HTTPoison.post(body, headers)
     |> handle_response()
   end
 
@@ -52,7 +62,7 @@ defmodule BeeminderWithingsSync.Withings.WithingsHTTPClient do
         {:error, error}
 
       {:error, _} = error ->
-        error
+        {:error, error}
     end
   end
 
