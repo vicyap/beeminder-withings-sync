@@ -70,48 +70,48 @@ defmodule BeeminderWithingsSync.BeeminderTest do
                Beeminder.get_beeminder_user_info!(beeminder_user_info.username)
     end
 
-    test "insert_or_update_beeminder_user_info/3 returns the beeminder_user_info if it exists" do
+    test "insert_or_update_beeminder_user_info_by_username/3 returns the beeminder_user_info if it exists" do
       beeminder_user_info = beeminder_user_info_fixture()
 
       assert {:ok, ^beeminder_user_info} =
-               Beeminder.insert_or_update_beeminder_user_info(
+               Beeminder.insert_or_update_beeminder_user_info_by_username(
                  beeminder_user_info.username,
                  beeminder_user_info.access_token
                )
     end
 
-    test "insert_or_update_beeminder_user_info/3 returns the beeminder_user_info if it exists and updates its access token" do
+    test "insert_or_update_beeminder_user_info_by_username/3 returns the beeminder_user_info if it exists and updates its access token" do
       beeminder_user_info = beeminder_user_info_fixture()
       username = beeminder_user_info.username
       access_token = "new_access_token"
 
       assert {:ok, %BeeminderUserInfo{username: ^username, access_token: ^access_token}} =
-               Beeminder.insert_or_update_beeminder_user_info(
+               Beeminder.insert_or_update_beeminder_user_info_by_username(
                  beeminder_user_info.username,
                  access_token
                )
     end
 
-    test "insert_or_update_beeminder_user_info/3 creates a new beeminder_user_info if it does not exist" do
+    test "insert_or_update_beeminder_user_info_by_username/3 creates a new beeminder_user_info if it does not exist" do
       username = "newuser"
       access_token = "new_access_token"
 
       assert {:ok, %BeeminderUserInfo{username: ^username, access_token: ^access_token}} =
-               Beeminder.insert_or_update_beeminder_user_info(username, access_token)
+               Beeminder.insert_or_update_beeminder_user_info_by_username(username, access_token)
     end
 
-    test "insert_or_update_beeminder_user_info/3 accepts preloads option" do
+    test "insert_or_update_beeminder_user_info_by_username/3 accepts preloads option" do
       username = "newuser"
       access_token = "new_access_token"
 
       assert {:ok,
               %BeeminderUserInfo{username: ^username, access_token: ^access_token, user: %User{}}} =
-               Beeminder.insert_or_update_beeminder_user_info(username, access_token,
+               Beeminder.insert_or_update_beeminder_user_info_by_username(username, access_token,
                  preloads: :user
                )
     end
 
-    test "insert_or_update_beeminder_user_info/3 accepts nested preloads option" do
+    test "insert_or_update_beeminder_user_info_by_username/3 accepts nested preloads option" do
       username = "newuser"
       access_token = "new_access_token"
 
@@ -126,7 +126,7 @@ defmodule BeeminderWithingsSync.BeeminderTest do
                   }
                 }
               }} =
-               Beeminder.insert_or_update_beeminder_user_info(username, access_token,
+               Beeminder.insert_or_update_beeminder_user_info_by_username(username, access_token,
                  preloads: [user: :beeminder_user_info]
                )
     end

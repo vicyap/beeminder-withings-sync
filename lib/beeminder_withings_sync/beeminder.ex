@@ -107,12 +107,12 @@ defmodule BeeminderWithingsSync.Beeminder do
   @doc """
   Inserts or updates a beeminder_user_info by username. Requires access_token.
   """
-  def insert_or_update_beeminder_user_info(username, access_token, opts \\ [])
+  def insert_or_update_beeminder_user_info_by_username(username, access_token, opts \\ [])
       when is_binary(username) and is_binary(access_token) do
     case Repo.get(BeeminderUserInfo, username) do
       nil ->
         {:ok, user} = Accounts.create_user(%{})
-        %BeeminderUserInfo{username: username, access_token: access_token, user_id: user.id}
+        %BeeminderUserInfo{username: username, user_id: user.id}
 
       beeminder_user_info ->
         beeminder_user_info

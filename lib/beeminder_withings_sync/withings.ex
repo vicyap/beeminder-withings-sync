@@ -55,6 +55,10 @@ defmodule BeeminderWithingsSync.Withings do
   """
   def get_withings_user_info!(withings_user_id), do: Repo.get!(WithingsUserInfo, withings_user_id)
 
+  def get_withings_user_info(withings_user_id) do
+    Repo.get(WithingsUserInfo, withings_user_id)
+  end
+
   @doc """
   Creates a withings_user_info.
 
@@ -89,6 +93,37 @@ defmodule BeeminderWithingsSync.Withings do
     withings_user_info
     |> WithingsUserInfo.changeset(attrs)
     |> Repo.update()
+  end
+
+  def insert_or_update_withings_user_info_by_user_id(user_id, attrs, opts \\ []) do
+    # TODO: replace attrs with a struct returned by withings_client.oauth2_request_token
+    attrs =
+      attrs
+      |> Map.put(
+        "expires_at",
+        DateTime.utc_now() |> DateTime.add(attrs["expires_in"], :second)
+      )
+      |> Map.put(
+        "withings_user_id",
+        Map.get(attrs, "userid")
+      )
+
+    case Repo.get_by(WithingsUserInfo, user_id: user_id) do
+      nil ->
+        %WithingsUserInfo{user_id: user_id}
+
+      withings_user_info ->
+        withings_user_info
+    end
+    |> WithingsUserInfo.changeset(attrs)
+    |> Repo.insert_or_update()
+    |> case do
+      {:ok, withings_user_info} ->
+        {:ok, Repo.preload(withings_user_info, opts[:preloads] || [])}
+
+      {:error, changeset} ->
+        {:error, changeset}
+    end
   end
 
   @doc """

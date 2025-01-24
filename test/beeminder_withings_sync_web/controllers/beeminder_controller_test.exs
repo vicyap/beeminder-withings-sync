@@ -34,7 +34,7 @@ defmodule BeeminderWithingsSyncWeb.BeeminderControllerTest do
 
       get(conn, auth_callback_url)
 
-      beeminder_user_info = Beeminder.get_beeminder_user_info!(username)
+      beeminder_user_info = Beeminder.get_beeminder_user_info(username)
       assert beeminder_user_info != nil
       assert beeminder_user_info.username == username
     end

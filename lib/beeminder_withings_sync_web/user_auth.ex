@@ -78,7 +78,9 @@ defmodule BeeminderWithingsSyncWeb.UserAuth do
 
     user =
       user_token &&
-        Accounts.get_user_by_session_token(user_token, preloads: [:beeminder_user_info])
+        Accounts.get_user_by_session_token(user_token,
+          preloads: [:beeminder_user_info, :withings_user_info]
+        )
 
     assign(conn, :current_user, user)
   end

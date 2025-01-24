@@ -9,7 +9,9 @@ defmodule BeeminderWithingsSyncWeb.BeeminderController do
 
     with {:ok, %{"username" => username}} <- beeminder_client.get_me(access_token),
          {:ok, beeminder_user_info} <-
-           Beeminder.insert_or_update_beeminder_user_info(username, access_token, preloads: :user) do
+           Beeminder.insert_or_update_beeminder_user_info_by_username(username, access_token,
+             preloads: :user
+           ) do
       UserAuth.log_in_user(conn, beeminder_user_info.user)
     else
       {:error, _reason} ->

@@ -5,10 +5,10 @@ defmodule BeeminderWithingsSync.Withings.WithingsUserInfo do
   @primary_key {:withings_user_id, :string, []}
   @foreign_key_type :binary_id
   schema "withings_user_infos" do
-    field :scope, :string
     field :access_token, :string
     field :refresh_token, :string
     field :expires_at, :utc_datetime
+    field :scope, :string
     field :token_type, :string
     field :csrf_token, :string
     belongs_to :user, BeeminderWithingsSync.Accounts.User
@@ -36,7 +36,6 @@ defmodule BeeminderWithingsSync.Withings.WithingsUserInfo do
       :expires_at,
       :scope,
       :token_type,
-      :csrf_token,
       :user_id
     ])
   end
