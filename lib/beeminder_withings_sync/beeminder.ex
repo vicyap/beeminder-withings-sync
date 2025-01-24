@@ -6,6 +6,7 @@ defmodule BeeminderWithingsSync.Beeminder do
   import Ecto.Query, warn: false
   alias BeeminderWithingsSync.Repo
 
+  alias BeeminderWithingsSync.Accounts
   alias BeeminderWithingsSync.Beeminder.BeeminderUserInfo
 
   @doc """
@@ -44,14 +45,28 @@ defmodule BeeminderWithingsSync.Beeminder do
 
   ## Examples
 
-      iex> get_beeminder_user_info!(123)
+      iex> get_beeminder_user_info!("username")
       %BeeminderUserInfo{}
 
-      iex> get_beeminder_user_info!(456)
+      iex> get_beeminder_user_info!("unknown")
       ** (Ecto.NoResultsError)
 
   """
-  def get_beeminder_user_info!(id), do: Repo.get!(BeeminderUserInfo, id)
+  def get_beeminder_user_info!(username), do: Repo.get!(BeeminderUserInfo, username)
+
+  @doc """
+  Gets a single beeminder_user_info.
+
+  ## Examples
+
+      iex> get_beeminder_user_info("username")
+      %BeeminderUserInfo{}
+
+      iex> get_beeminder_user_info("unknown")
+      nil
+
+  """
+  def get_beeminder_user_info(username), do: Repo.get(BeeminderUserInfo, username)
 
   @doc """
   Creates a beeminder_user_info.
@@ -87,6 +102,30 @@ defmodule BeeminderWithingsSync.Beeminder do
     beeminder_user_info
     |> BeeminderUserInfo.changeset(attrs)
     |> Repo.update()
+  end
+
+  @doc """
+  Inserts or updates a beeminder_user_info by username. Requires access_token.
+  """
+  def insert_or_update_beeminder_user_info(username, access_token, opts \\ [])
+      when is_binary(username) and is_binary(access_token) do
+    case Repo.get(BeeminderUserInfo, username) do
+      nil ->
+        {:ok, user} = Accounts.create_user(%{})
+        %BeeminderUserInfo{username: username, access_token: access_token, user_id: user.id}
+
+      beeminder_user_info ->
+        beeminder_user_info
+    end
+    |> BeeminderUserInfo.changeset(%{access_token: access_token})
+    |> Repo.insert_or_update()
+    |> case do
+      {:ok, beeminder_user_info} ->
+        {:ok, Repo.preload(beeminder_user_info, opts[:preloads] || [])}
+
+      {:error, changeset} ->
+        {:error, changeset}
+    end
   end
 
   @doc """

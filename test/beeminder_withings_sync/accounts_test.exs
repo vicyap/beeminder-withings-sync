@@ -1,21 +1,10 @@
 defmodule BeeminderWithingsSync.AccountsTest do
   use BeeminderWithingsSync.DataCase
 
-  alias BeeminderWithingsSync.Accounts
-
   import BeeminderWithingsSync.AccountsFixtures
+
+  alias BeeminderWithingsSync.Accounts
   alias BeeminderWithingsSync.Accounts.{User, UserToken}
-
-  describe "get_user_by_beeminder_username/1" do
-    test "does not return the user if the beeminder username does not exist" do
-      refute Accounts.get_user_by_beeminder_username("unknown")
-    end
-
-    test "returns the user if the beeminder username exists" do
-      %{id: id} = user = user_fixture()
-      assert %User{id: ^id} = Accounts.get_user_by_beeminder_username(user.beeminder_username)
-    end
-  end
 
   describe "get_user!/1" do
     test "raises if id is invalid" do
@@ -27,22 +16,6 @@ defmodule BeeminderWithingsSync.AccountsTest do
     test "returns the user with the given id" do
       %{id: id} = user = user_fixture()
       assert %User{id: ^id} = Accounts.get_user!(user.id)
-    end
-  end
-
-  describe "create_user/1" do
-    test "requires beeminder username to be set" do
-      {:error, changeset} = Accounts.create_user(%{})
-
-      assert %{
-              beeminder_username: ["can't be blank"]
-             } = errors_on(changeset)
-    end
-
-    test "validates beeminder username uniqueness" do
-      %{beeminder_username: beeminder_username} = user_fixture()
-      {:error, changeset} = Accounts.create_user(%{beeminder_username: beeminder_username})
-      assert "has already been taken" in errors_on(changeset).beeminder_username
     end
   end
 

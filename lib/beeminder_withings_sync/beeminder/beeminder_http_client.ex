@@ -1,7 +1,7 @@
 defmodule BeeminderWithingsSync.Beeminder.BeeminderHTTPClient do
   @behaviour BeeminderWithingsSync.Beeminder.BeeminderClient
 
-  def get_current_user(access_token) when is_binary(access_token) do
+  def get_me(access_token) when is_binary(access_token) do
     params = %{access_token: access_token}
 
     api_base_url()
@@ -9,7 +9,19 @@ defmodule BeeminderWithingsSync.Beeminder.BeeminderHTTPClient do
     |> URI.append_path("/users/me.json")
     |> Map.put(:query, URI.encode_query(params))
     |> URI.to_string()
-    |> IO.inspect()
+    |> HTTPoison.get()
+    |> handle_response()
+  end
+
+  def get_user(username, auth_token)
+      when is_binary(username) and is_binary(auth_token) do
+    params = %{auth_token: auth_token}
+
+    api_base_url()
+    |> URI.parse()
+    |> URI.append_path("/users/#{username}.json")
+    |> Map.put(:query, URI.encode_query(params))
+    |> URI.to_string()
     |> HTTPoison.get()
     |> handle_response()
   end

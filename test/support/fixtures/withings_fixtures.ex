@@ -6,7 +6,7 @@ defmodule BeeminderWithingsSync.WithingsFixtures do
 
   import BeeminderWithingsSync.AccountsFixtures
 
-  def unique_withings_user_id, do: "withings-user-#{System.unique_integer()}"
+  def unique_withings_user_id, do: "withings-user#{System.unique_integer()}"
 
   @doc """
   Generate a withings_user_info.

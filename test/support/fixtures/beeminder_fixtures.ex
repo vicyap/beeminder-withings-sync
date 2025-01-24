@@ -6,7 +6,7 @@ defmodule BeeminderWithingsSync.BeeminderFixtures do
 
   import BeeminderWithingsSync.AccountsFixtures
 
-  def unique_beeminder_username, do: "beeminder-user-#{System.unique_integer()}"
+  def unique_beeminder_username, do: "beeminder-user#{System.unique_integer()}"
 
   @doc """
   Generate a beeminder_user_info.

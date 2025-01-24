@@ -46,14 +46,14 @@ defmodule BeeminderWithingsSync.Withings do
 
   ## Examples
 
-      iex> get_withings_user_info!(123)
+      iex> get_withings_user_info!("userid")
       %WithingsUserInfo{}
 
-      iex> get_withings_user_info!(456)
+      iex> get_withings_user_info!("unknown")
       ** (Ecto.NoResultsError)
 
   """
-  def get_withings_user_info!(id), do: Repo.get!(WithingsUserInfo, id)
+  def get_withings_user_info!(withings_user_id), do: Repo.get!(WithingsUserInfo, withings_user_id)
 
   @doc """
   Creates a withings_user_info.
