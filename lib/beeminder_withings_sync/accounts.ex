@@ -24,7 +24,10 @@ defmodule BeeminderWithingsSync.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id, opts \\ []) do
+    Repo.get!(User, id)
+    |> Repo.preload(opts[:preloads] || [])
+  end
 
   ## User creation
 
@@ -60,9 +63,20 @@ defmodule BeeminderWithingsSync.Accounts do
   @doc """
   Gets the user with the given signed token.
   """
-  def get_user_by_session_token(token) do
+  def get_user_by_session_token(token, opts \\ []) do
     {:ok, query} = UserToken.verify_session_token_query(token)
+
     Repo.one(query)
+    |> case do
+      %User{} = user ->
+        Repo.preload(user, opts[:preloads] || [])
+
+      nil ->
+        nil
+
+      other ->
+        other
+    end
   end
 
   @doc """
