@@ -3,20 +3,17 @@ defmodule BeeminderWithingsSyncWeb.DashboardLive do
 
   alias BeeminderWithingsSyncWeb.OAuthHelpers
 
+  import BeeminderWithingsSyncWeb.MyComponents
+
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
-      <.header class="text-center">
-        Authorize Withings
-      </.header>
-
-      <.link
-        href={@withings_auth_url}
-        class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-      >
-        Authorize Withings
-      </.link>
-    </div>
+    <.app_home></.app_home>
+    <.link
+      href={@withings_auth_url}
+      class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+    >
+      Authorize Withings
+    </.link>
     """
   end
 

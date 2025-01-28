@@ -24,15 +24,15 @@ defmodule BeeminderWithingsSync.Application do
           BeeminderWithingsSyncWeb.Endpoint
         ]
 
-    children =
-      if Application.get_env(:beeminder_withings_sync, :start_withings_token_refresher, true) do
-        children ++
-          [
-            {BeeminderWithingsSync.Withings.TokenRefresher, refresh_buffer_ms: 300_000}
-          ]
-      else
-        children
-      end
+    # children =
+    #   if Application.get_env(:beeminder_withings_sync, :start_withings_token_refresher, true) do
+    #     children ++
+    #       [
+    #         {BeeminderWithingsSync.Withings.TokenRefresher, refresh_buffer_ms: 300_000}
+    #       ]
+    #   else
+    #     children
+    #   end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
